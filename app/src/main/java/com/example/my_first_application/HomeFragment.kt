@@ -8,6 +8,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.my_first_application.databinding.FragmentHomeBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeFragment : Fragment() {
 
@@ -25,24 +28,28 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 1. Siapkan data dummy
-        val daftarSiswa = listOf(
-            Siswa("Rizqi Pratama", "XII RPL 1", 88),
-            Siswa("Muhamad Alghani", "XII RPL 1", 92),
-            Siswa("Nazril Fahrezi", "XII RPL 1", 79),
-            Siswa("Aqilah kukuk", "XII RPL 1", 85),
-            Siswa("Fauzan Zhahir", "XII RPL 1", 90)
-        )
-
-        // 2. Buat Adapter
-        val adapter = SiswaAdapter(daftarSiswa) { siswaDipilih ->
-            // Aksi saat item diklik: Tampilkan Toast
-            Toast.makeText(context, "Kamu memilih: ${siswaDipilih.nama}", Toast.LENGTH_SHORT).show()
-        }
-
-        // 3. Atur RecyclerView
         binding.rvSiswa.layoutManager = LinearLayoutManager(context)
-        binding.rvSiswa.adapter = adapter
+
+        // Panggil fungsi untuk mengambil data dari internet
+        ambilDataUser()
+    }
+
+    private fun ambilDataUser() {
+        RetrofitClient.apiService.getUsers().enqueue(object : Callback<List<User>> {
+            override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
+                if (response.isSuccessful) {
+                    val daftarUser = response.body() ?: emptyList()
+                    // Pasang data dari internet ke RecyclerView menggunakan UserAdapter
+                    binding.rvSiswa.adapter = UserAdapter(daftarUser)
+                } else {
+                    Toast.makeText(context, "Gagal mengambil data", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<User>>, t: Throwable) {
+                Toast.makeText(context, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun onDestroyView() {
