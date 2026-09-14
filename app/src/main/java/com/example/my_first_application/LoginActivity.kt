@@ -26,6 +26,13 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this, "Username dan password wajib diisi", Toast.LENGTH_SHORT).show()
                 }
                 username == DUMMY_USERNAME && password == DUMMY_PASSWORD -> {
+                    // simpan session ke SharedPreferences
+                    val sharedPref = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+                    sharedPref.edit()
+                        .putString("USERNAME", username)
+                        .putBoolean("IS_LOGGED_IN", true)
+                        .apply()
+
                     val intent = Intent(this, MainActivity::class.java)
                     intent.putExtra("USERNAME", username)
                     startActivity(intent)

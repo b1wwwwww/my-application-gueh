@@ -12,4 +12,9 @@
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_profile"
         android:title="Profile" />
+
+    <item
+        android:id="@+id/nav_siswa"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="Siswa Room" />
 </menu>

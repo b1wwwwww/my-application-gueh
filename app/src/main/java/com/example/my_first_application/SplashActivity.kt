@@ -18,8 +18,12 @@ class SplashActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            val sharedPref = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+            val isLoggedIn = sharedPref.getBoolean("IS_LOGGED_IN", false)
+
+            // jika sudah login, langsung ke MainActivity, dan jika belum ke LoginActivity dlu
+            val tujuan = if (isLoggedIn) MainActivity::class.java else LoginActivity::class.java
+            startActivity(Intent(this, tujuan))
             finish()
         }, SPLASH_DELAY)
     }

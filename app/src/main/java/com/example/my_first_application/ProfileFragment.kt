@@ -11,9 +11,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Tetap menambahkan logika logout
         val btnLogout = view.findViewById<Button>(R.id.btnLogoutFragment)
         btnLogout.setOnClickListener {
+            // 1. Hapus semua data session di SharedPreferences
+            val sharedPref = requireActivity().getSharedPreferences("AppPrefs", android.content.Context.MODE_PRIVATE)
+            sharedPref.edit().clear().apply()
+
+            // 2. Baru kemudian pindah ke LoginActivity
             val intent = Intent(requireActivity(), LoginActivity::class.java)
             startActivity(intent)
             requireActivity().finish()

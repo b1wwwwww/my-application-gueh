@@ -32,6 +32,10 @@ class MainActivity : AppCompatActivity() {
                     loadFragment(ProfileFragment())
                     true
                 }
+                R.id.nav_siswa -> {
+                    loadFragment(StudentFragment())
+                    true
+                }
                 else -> false
             }
         }
