@@ -35,8 +35,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun ambilDataUser() {
+        // Tampilkan loading
+        binding.progressBar.visibility = View.VISIBLE
+
         RetrofitClient.apiService.getUsers().enqueue(object : Callback<List<User>> {
             override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
+                // Sembunyikan loading
+                binding.progressBar.visibility = View.GONE
+
                 if (response.isSuccessful) {
                     val daftarUser = response.body() ?: emptyList()
                     // Pasang data dari internet ke RecyclerView menggunakan UserAdapter
@@ -47,6 +53,8 @@ class HomeFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<User>>, t: Throwable) {
+                // Sembunyikan loading
+                binding.progressBar.visibility = View.GONE
                 Toast.makeText(context, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
